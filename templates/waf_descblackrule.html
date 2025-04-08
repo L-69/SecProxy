@@ -1,0 +1,58 @@
+<div class="config-card">
+    <h4 class="mb-4"><i class="fas fa-book me-2"></i>规则描述管理</h4>
+    
+    <div class="row g-4">
+        <!-- 规则分类导航 -->
+        <div class="col-lg-3">
+            <div class="nav flex-column nav-pills">
+                <button class="nav-link active" data-bs-toggle="pill" 
+                        data-target="#ipRules">IP规则</button>
+                <button class="nav-link" data-bs-toggle="pill" 
+                        data-target="#sqlRules">SQL注入规则</button>
+                <button class="nav-link" data-bs-toggle="pill"
+                        data-target="#xssRules">XSS防护规则</button>
+            </div>
+        </div>
+
+        <!-- 规则内容区域 -->
+        <div class="col-lg-9">
+            <div class="tab-content">
+                <!-- IP规则 -->
+                <div class="tab-pane fade show active" id="ipRules">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5><i class="fas fa-network-wired me-2"></i>IP封禁规则</h5>
+                            <pre class="bg-light p-3 rounded"># 格式：IP地址/掩码 封禁时间(秒) 原因
+192.168.1.0/24 3600 可疑扫描行为
+10.0.0.5/32 permanent 已知攻击源</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SQL注入规则 -->
+                <div class="tab-pane fade" id="sqlRules">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5><i class="fas fa-database me-2"></i>SQL注入防护规则</h5>
+                            <pre class="bg-light p-3 rounded"># 匹配模式：正则表达式
+\b(union|select|insert|delete|update|drop|alter)\b</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- XSS规则 -->
+                <div class="tab-pane fade" id="xssRules">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5><i class="fas fa-code me-2"></i>XSS攻击防护规则</h5>
+                            <pre class="bg-light p-3 rounded"># 匹配特征：
+<script>.*?</script>
+javascript:
+<iframe></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

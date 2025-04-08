@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>配置管理</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --tech-blue: #00f3ff;
+            --cyber-purple: #bd00ff;
+            --dark-bg: #0a0a1a;
+        }
+
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .header {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .config-form {
+            margin-top: 40px;
+        }
+
+        .config-form .form-group {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>配置管理</h1>
+        <p class="text-muted">管理系统的环境配置</p>
+    </header>
+
+    <div class="container">
+        <div class="config-form">
+            <h3 class="mb-4">环境配置</h3>
+            <form id="configForm">
+                <!-- 配置项将动态加载到这里 -->
+            </form>
+            <button class="btn btn-primary" id="saveConfigBtn">保存配置</button>
+        </div>
+    </div>
+
+    <!-- 脚本引用 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../static/js/config.js"></script>
+</body>
+</html>

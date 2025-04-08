@@ -1,0 +1,73 @@
+<div class="config-card">
+    <h4 class="mb-4"><i class="fas fa-shield-alt me-2"></i>黑名单规则修改</h4>
+    
+    <div class="alert alert-warning mb-4">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        修改黑名单规则可能影响现有防护策略，请谨慎操作
+    </div>
+
+    <form id="modifyBlackRuleForm" onsubmit="submitForm(event, this)">
+        <div class="mb-3">
+            <label class="form-label">规则ID</label>
+            <input type="text" class="form-control" name="rule_id" 
+                   required readonly>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">匹配模式</label>
+            <select class="form-select" name="match_type" required>
+                <option value="regex">正则表达式</option>
+                <option value="keyword">关键词匹配</option>
+                <option value="ip">IP范围</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">规则内容</label>
+            <textarea class="form-control" name="pattern" 
+                      rows="3" required></textarea>
+        </div>
+
+        <div class="row g-3 mb-3">
+            <div class="col-md-6">
+                <label class="form-label">生效时间</label>
+                <input type="datetime-local" class="form-control" 
+                       name="effective_time" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">动作</label>
+                <select class="form-select" name="action" required>
+                    <option value="block">拦截</option>
+                    <option value="log">仅记录</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save me-2"></i>保存修改
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+function submitForm(e, form) {
+    e.preventDefault();
+    const formData = new FormData(form);
+    
+    fetch('/api/waf/modify_black_rule', {
+        method: 'PUT',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.success) {
+            showToast('success', '规则更新成功');
+        } else {
+            showToast('danger', data.message || '更新失败');
+        }
+    })
+    .catch(handleError);
+}
+</script>

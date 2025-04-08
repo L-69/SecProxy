@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>安全防护配置平台</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <style>
+        :root {
+            --tech-blue: #00f3ff;
+            --cyber-purple: #bd00ff;
+            --dark-bg: #0a0a1a;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>SecProxy平台</h1>
+        <p class="text-muted">一站式安全防护智能管理系统</p>
+    </header>
+
+    <main class="main-container">
+        <nav class="menu-panel">
+            <button class="menu-item active" data-route="/waf_listwhite" onclick="loadContent(this)">
+                <i class="fas fa-list-ul me-2"></i>
+                白名单列表
+            </button>
+            <button class="menu-item" data-route="/waf_addwhite" onclick="loadContent(this)">
+                <i class="fas fa-plus-circle me-2"></i>
+                添加白名单
+            </button>
+            <button class="menu-item" data-route="/waf_deletewhite" onclick="loadContent(this)">
+                <i class="fas fa-trash-alt me-2"></i>
+                删除白名单
+            </button>
+            <button class="menu-item" data-route="/waf_dd_alert" onclick="loadContent(this)">
+                <i class="fab fa-dingtalk me-2"></i>
+                钉钉告警设置
+            </button>
+            <button class="menu-item" data-route="/waf_descblackrule" onclick="loadContent(this)">
+                <i class="fas fa-shield-alt me-2"></i>
+                黑名单规则查看
+            </button>
+            <button class="menu-item" data-route="/waf_modifyblackrule" onclick="loadContent(this)">
+                <i class="fas fa-shield-alt me-2"></i>
+                黑名单规则修改
+            </button>
+            <button class="menu-item" data-route="/waf_ddalert" onclick="loadContent(this)">
+                <i class="fas fa-book me-2"></i>
+                钉钉告警设置
+            </button>
+            <button class="menu-item" data-route="/waf_attackreport" onclick="loadContent(this)">
+                <i class="fas fa-chart-bar me-2"></i>
+                攻击汇总分析
+            </button>
+            <button class="menu-item" data-route="/config" onclick="loadContent(this)">
+                <i class="fas fa-chart-bar me-2"></i>
+                系统配置
+            </button>
+        </nav>
+
+        <div class="content-panel">
+            <div class="content-header">
+                <h2 class="content-title">系统概览</h2>
+                <div class="last-update">最后更新:添加个路由后端接口，完善系统各项能力！ <span id="lastUpdateTime">--</span></div>
+            </div>
+            <div id="mainContent">
+                <div class="welcome-card p-4 rounded-3 shadow-sm bg-white">
+                    <h3 class="mb-3">欢迎使用安全防护配置平台</h3>
+                    <p class="text-muted">请从左侧菜单选择要操作的功能模块</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 加载动画 -->
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="loading-spinner"></div>
+        </div>
+    </main>
+
+    <footer class="footer py-3">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <span class="text-muted">© 2024 安全防护系统 版权所有</span>
+                <div class="social-links">
+                    <a href="mailto:security@example.com" class="text-white me-3">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                    <a href="#" class="text-white">
+                        <i class="fas fa-question-circle"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 脚本引用 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

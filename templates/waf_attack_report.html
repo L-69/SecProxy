@@ -1,0 +1,135 @@
+<div class="config-card">
+    <h4 class="mb-4"><i class="fas fa-chart-bar me-2"></i>攻击报表分析</h4>
+    
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <select class="form-select" id="timeRange">
+                <option value="24h">最近24小时</option>
+                <option value="7d">最近7天</option>
+                <option value="30d">最近30天</option>
+            </select>
+        </div>
+        <div class="col-md-8 d-flex gap-2 justify-content-end">
+            <button class="btn btn-outline-primary" onclick="refreshCharts()">
+                <i class="fas fa-sync-alt me-2"></i>刷新数据
+            </button>
+        </div>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-header">攻击类型分布</div>
+                <div class="card-body">
+                    <canvas id="attackTypeChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-header">攻击趋势分析</div>
+                <div class="card-body">
+                    <canvas id="attackTrendChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <div class="card">
+            <div class="card-header">详细攻击日志</div>
+            <div class="card-body">
+                <div id="attackLogs" class="overflow-auto" style="max-height: 400px">
+                    <!-- 动态加载攻击日志 -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// 初始化图表
+let typeChart, trendChart;
+
+document.addEventListener('DOMContentLoaded', function() {
+    initCharts();
+    loadReportData();
+});
+
+function initCharts() {
+    const ctx1 = document.getElementById('attackTypeChart');
+    const ctx2 = document.getElementById('attackTrendChart');
+    
+    typeChart = new Chart(ctx1, {
+        type: 'doughnut',
+        data: {
+            labels: [],
+            datasets: [{
+                data: [],
+                backgroundColor: ['#ff6384', '#36a2eb', '#ffce56']
+            }]
+        }
+    });
+
+    trendChart = new Chart(ctx2, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: '攻击次数',
+                data: [],
+                borderColor: '#dc3545',
+                tension: 0.1
+            }]
+        }
+    });
+}
+
+function loadReportData() {
+    fetch('/api/waf/attack_report')
+        .then(response => response.json())
+        .then(data => {
+            updateTypeChart(data.types);
+            updateTrendChart(data.trend);
+            updateAttackLogs(data.logs);
+        })
+        .catch(handleError);
+}
+
+function updateTypeChart(data) {
+    typeChart.data.labels = Object.keys(data);
+    typeChart.data.datasets[0].data = Object.values(data);
+    typeChart.update();
+}
+
+function updateTrendChart(data) {
+    trendChart.data.labels = data.labels;
+    trendChart.data.datasets[0].data = data.values;
+    trendChart.update();
+}
+
+function updateAttackLogs(logs) {
+    const container = document.getElementById('attackLogs');
+    container.innerHTML = logs.map(log => `
+        <div class="alert alert-danger py-2 mb-2">
+            <div class="d-flex justify-content-between">
+                <span>${new Date(log.time).toLocaleString()}</span>
+                <strong>${log.type}</strong>
+            </div>
+            <div class="text-muted">${log.ip} - ${log.detail}</div>
+        </div>
+    `).join('');
+}
+
+function refreshCharts() {
+    typeChart.data.labels = [];
+    typeChart.data.datasets[0].data = [];
+    trendChart.data.labels = [];
+    trendChart.data.datasets[0].data = [];
+    typeChart.update();
+    trendChart.update();
+    
+    loadReportData();
+}
+</script>

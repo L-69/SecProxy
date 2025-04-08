@@ -1,0 +1,105 @@
+<div class="config-card">
+    <h4 class="mb-4"><i class="fas fa-shield-alt me-2"></i>添加白名单</h4>
+
+    <form id="addWhiteForm" onsubmit="return submitForm(event, this)" action="/api/waf/addwhite" method="POST">
+        <div class="mb-3">
+            <label class="form-label">白名单参数</label>
+            <input type="text" class="form-control" name="target" required 
+                   placeholder='请输入要加入白名单的IP或域名，例如：[{"name":"test1","tags":["waf"],"status":1,"origin":"custom","conditions":[{"key":"IP","opValue":"contain","subKey":"","values":"1.2.5.27"}]}]'>
+        </div>
+
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button type="reset" class="btn btn-secondary">重置</button>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-plus-circle me-2"></i>立即添加
+            </button>
+        </div>
+
+        <!-- 信息展示区 -->
+        <div id="toastMessage" class="mt-3" style="display: none; text-align: center;"></div>
+
+        <!-- 说明框 -->
+        <div class="mt-3 p-3 border rounded" style="background-color: #f8f9fa; font-size: 0.875rem;">
+            <p><strong>使用说明：</strong></p>
+            <p>请按照以下格式提供要添加的白名单规则：</p>
+            <pre>[{"name":"test1","tags":["waf"],"status":1,"origin":"custom","conditions":[{"key":"IP","opValue":"contain","subKey":"","values":"1.2.5.7"}]}]</pre>
+            <p><strong>字段说明：</strong></p>
+            <ul>
+                <li><strong>name：</strong>规则名称</li>
+                <li><strong>tags：</strong>具体标识可查看阿里云waf官方文档，其中waf表示对所有模块加白！</li>
+                <li><strong>status：</strong>规则状态，1表示启用，0表示禁用</li>
+                <li><strong>origin：</strong>规则来源，custom表示自定义</li>
+                <li><strong>conditions：</strong>条件数组，包含规则的具体条件</li>
+                     <ul>
+                         <li><strong>key：</strong>条件类型，IP表示IP地址，URI表示URI接口，Cookie表示Cookie，Header表示请求头，具体请阅读阿里云waf官方文档</li>
+                         <li><strong>opValue：</strong>操作符，contain表示包含，equal表示等于，具体请阅读阿里云waf官方文档</li>
+                         <li><strong>subKey：</strong>子条件，可选，具体请阅读阿里云waf官方文档</li>
+                         <li><strong>values：</strong>具体值，多个值用英文逗号分隔</li>
+                     </ul>
+            <p style="color:red;">确保填写的信息格式正确，否则可能无法成功添加。</p>
+        </div>
+
+    </form>
+</div>
+
+<script>
+    function submitForm(event, form) {
+        event.preventDefault();  // 防止表单默认提交行为
+        
+        // 获取表单中的输入值
+        const targetValue = form.target.value;
+
+        // 检查输入值是否为空
+        if (!targetValue) {
+            alert('请输入白名单参数');
+            return false;
+        }
+
+        // 将输入的字符串转换为 JSON 对象
+        let targetData;
+        try {
+            targetData = JSON.parse(targetValue);
+        } catch (error) {
+            alert('输入的白名单参数格式错误');
+            return false;
+        }
+
+        // 构建请求数据
+        const requestData = {
+            target: JSON.stringify(targetData)  // 需要将 JSON 对象转换为字符串
+        };
+
+        // 使用 fetch 发送 POST 请求
+        fetch('/api/waf/addwhite', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'  // 根据后端的接受格式设置 Content-Type
+            },
+            body: new URLSearchParams(requestData)  // 将数据转为 URL 参数格式
+        })
+        .then(response => response.json())  // 将响应转换为 JSON
+        .then(data => {
+            // 根据后端返回的状态显示提示信息
+            const messageDiv = document.getElementById('toastMessage');
+            if (data.status === 'success') {
+                messageDiv.style.display = 'block';
+                messageDiv.innerHTML = '白名单添加成功';
+                messageDiv.style.color = 'green';
+            } else {
+                messageDiv.style.display = 'block';
+                messageDiv.innerHTML = `错误: ${data.message}`;
+                messageDiv.style.color = 'red';
+            }
+        })
+        .catch(error => {
+            console.error('请求错误:', error);
+            const messageDiv = document.getElementById('toastMessage');
+            messageDiv.style.display = 'block';
+            messageDiv.innerHTML = '发生内部错误，请重试';
+            messageDiv.style.color = 'red';
+        });
+
+        return false;  // 阻止表单默认提交
+    }
+</script>
+

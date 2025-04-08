@@ -1,0 +1,52 @@
+<div class="config-card">
+    <h4 class="mb-4"><i class="fas fa-trash-alt me-2"></i>删除白名单</h4>
+    
+    <div class="alert alert-warning mb-4">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        删除操作不可逆，请谨慎操作！
+    </div>
+
+    <form id="deleteWhiteForm" onsubmit="submitForm(event, this)">
+        <div class="mb-3">
+            <label class="form-label">目标ID/IP地址</label>
+            <input type="text" class="form-control" name="target" required 
+                   placeholder="请输入要删除的白名单ID或IP地址">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">删除原因</label>
+            <textarea class="form-control" name="reason" rows="3" 
+                      placeholder="请填写删除原因（至少20字）" required></textarea>
+        </div>
+
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button type="submit" class="btn btn-danger">
+                <i class="fas fa-trash me-2"></i>确认删除
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+function submitForm(e, form) {
+    e.preventDefault();
+    if(!confirm('确定要删除该白名单记录吗？')) return;
+    
+    const formData = new FormData(form);
+    
+    fetch('/api/waf/delete_white', {
+        method: 'DELETE',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.success) {
+            showToast('success', '删除成功');
+            form.reset();
+        } else {
+            showToast('danger', data.message || '操作失败');
+        }
+    })
+    .catch(handleError);
+}
+</script>

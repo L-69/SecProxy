@@ -1,0 +1,76 @@
+<div class="config-card">
+    <h4 class="mb-4"><i class="fab fa-dingtalk me-2"></i>钉钉告警设置</h4>
+    
+    <div class="alert alert-info mb-4">
+        <i class="fas fa-info-circle me-2"></i>
+        请确保已在钉钉群组创建自定义机器人并获取webhook地址
+    </div>
+
+    <form id="ddAlertForm" onsubmit="submitConfig(event, this)">
+        <div class="row g-3 mb-3">
+            <div class="col-md-6">
+                <label class="form-label">Webhook地址</label>
+                <input type="url" class="form-control" name="webhook" 
+                       required placeholder="https://oapi.dingtalk.com/robot/send?access_token=xxx">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">安全签名</label>
+                <input type="text" class="form-control" name="secret" 
+                       placeholder="加签密钥（可选）">
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">告警级别</label>
+            <div class="btn-group w-100" role="group">
+                <button type="button" class="btn btn-outline-danger active">紧急</button>
+                <button type="button" class="btn btn-outline-warning">重要</button>
+                <button type="button" class="btn btn-outline-info">一般</button>
+            </div>
+        </div>
+
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button type="button" class="btn btn-secondary" onclick="testConnection()">
+                <i class="fas fa-plug me-2"></i>测试连接
+            </button>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save me-2"></i>保存配置
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+function submitConfig(e, form) {
+    e.preventDefault();
+    const formData = new FormData(form);
+    
+    fetch('/api/dingtalk/config', {
+        method: 'POST',
+        body: formData
+    })
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+function testConnection() {
+    fetch('/api/dingtalk/test')
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+function handleResponse(response) {
+    return response.json().then(data => {
+        if(data.success) {
+            showToast('success', data.message);
+        } else {
+            showToast('danger', data.message);
+        }
+    });
+}
+
+function handleError(error) {
+    console.error('Error:', error);
+    showToast('danger', '请求异常');
+}
+</script>
