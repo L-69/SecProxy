@@ -4,7 +4,7 @@ let pageSize = 10;
 
 // 请求白名单数据的函数
 function fetchWhiteList() {
-    const url = `/api/waf/listwhite?page=${currentPage}&page_size=${pageSize}`;
+    const url = '/api/waf/listwhite';  // 假设不需要传递页码和每页条数，接口内部处理
 
     // 显示加载动画
     const whiteListBody = document.getElementById("whiteListBody");
@@ -25,7 +25,8 @@ function fetchWhiteList() {
         .then(data => {
             // 请求成功后处理数据
             if (data.status === "success") {
-                const rules = data.message; // 假设返回的数据格式是 { status: "success", message: [] }
+                const rules = data.message; // 白名单数据
+                const totalCount = data.total_count; // 白名单总条数
                 const whiteListBody = document.getElementById("whiteListBody");
                 whiteListBody.innerHTML = "";
 
@@ -48,6 +49,9 @@ function fetchWhiteList() {
                             </tr>
                         `;
                     });
+
+                    // 更新分页信息
+                    updatePagination(totalCount);
                 }
             } else {
                 alert("加载白名单数据失败，请重试！");
@@ -57,6 +61,21 @@ function fetchWhiteList() {
             console.error("请求失败:", error);
             alert("加载白名单数据失败，请重试！");
         });
+}
+
+// 更新分页信息
+function updatePagination(totalCount) {
+    const totalPages = Math.ceil(totalCount / pageSize);  // 计算总页数
+    const pageInfo = document.getElementById("pageInfo");
+    const prevButton = document.getElementById("prevButton");
+    const nextButton = document.getElementById("nextButton");
+
+    // 更新当前页信息
+    pageInfo.textContent = `第 ${currentPage} 页 / 共 ${totalPages} 页`;
+
+    // 控制上一页和下一页按钮的可用状态
+    prevButton.disabled = currentPage === 1;
+    nextButton.disabled = currentPage === totalPages;
 }
 
 // 点击菜单时自动请求列表
@@ -78,18 +97,18 @@ document.getElementById('pageSizeSelector').addEventListener('change', function 
 });
 
 // 上一页按钮事件
-function prevPage() {
+document.getElementById("prevButton").addEventListener("click", function() {
     if (currentPage > 1) {
         currentPage--;
         fetchWhiteList();
     }
-}
+});
 
 // 下一页按钮事件
-function nextPage() {
+document.getElementById("nextButton").addEventListener("click", function() {
     currentPage++;
     fetchWhiteList();
-}
+});
 
 // 初次加载时自动请求一次列表
 window.onload = function() {
