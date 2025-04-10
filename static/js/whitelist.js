@@ -1,14 +1,16 @@
-// 全局变量
+// 全局变量，用于记录当前的页码和每页显示的条数
 let currentPage = 1;
 let pageSize = 10;
-let allWhiteListData = [];
 
-// 加载白名单列表数据
-function loadWhiteList() {
-    const whiteListBody = document.getElementById('whiteListBody');
-    const loadingMessage = `
+// 请求白名单数据的函数
+function fetchWhiteList() {
+    const url = `/api/waf/listwhite?page=${currentPage}&page_size=${pageSize}`;
+
+    // 显示加载动画
+    const whiteListBody = document.getElementById("whiteListBody");
+    whiteListBody.innerHTML = `
         <tr>
-            <td colspan="5" class="text-center text-muted py-4">
+            <td colspan="3" class="text-center text-muted py-4">
                 <div class="spinner-border spinner-border-sm" role="status">
                     <span class="visually-hidden">加载中...</span>
                 </div>
@@ -16,113 +18,80 @@ function loadWhiteList() {
             </td>
         </tr>
     `;
-    whiteListBody.innerHTML = loadingMessage;
 
-    fetch('api/waf/listwhite')
-      .then(response => {
-            if (!response.ok) {
-                throw new Error('网络响应异常');
+    // 发起AJAX请求获取白名单数据
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            // 请求成功后处理数据
+            if (data.status === "success") {
+                const rules = data.message; // 假设返回的数据格式是 { status: "success", message: [] }
+                const whiteListBody = document.getElementById("whiteListBody");
+                whiteListBody.innerHTML = "";
+
+                if (rules.length === 0) {
+                    whiteListBody.innerHTML = `
+                        <tr>
+                            <td colspan="3" class="text-center text-muted py-4">
+                                没有找到白名单数据
+                            </td>
+                        </tr>
+                    `;
+                } else {
+                    // 填充白名单规则数据
+                    rules.forEach(rule => {
+                        whiteListBody.innerHTML += `
+                            <tr>
+                                <td>${rule.rule_template}</td>
+                                <td>${rule.rule_id}</td>
+                                <td>${rule.rule_name}</td>
+                            </tr>
+                        `;
+                    });
+                }
+            } else {
+                alert("加载白名单数据失败，请重试！");
             }
-            return response.json();
         })
-      .then(data => {
-            allWhiteListData = data.message;
-            renderWhiteList(allWhiteListData);
-        })
-      .catch(error => {
-            whiteListBody.innerHTML = `<tr><td colspan="5" class="text-center text-danger py-4">加载数据出错：${error.message}</td></tr>`;
+        .catch(error => {
+            console.error("请求失败:", error);
+            alert("加载白名单数据失败，请重试！");
         });
 }
 
-// 渲染白名单列表
-function renderWhiteList(data) {
-    const startIndex = (currentPage - 1) * pageSize;
-    const endIndex = startIndex + pageSize;
-    const currentPageData = data.slice(startIndex, endIndex);
+// 点击菜单时自动请求列表
+document.getElementById('menuItem').addEventListener('click', function () {
+    currentPage = 1; // 点击菜单时重置为第一页
+    fetchWhiteList();
+});
 
-    const whiteListBody = document.getElementById('whiteListBody');
-    let tableRows = '';
-    if (currentPageData.length === 0) {
-        tableRows = `<tr><td colspan="5" class="text-center text-muted py-4">没有数据</td></tr>`;
-    } else {
-        currentPageData.forEach(item => {
-            tableRows += `
-                <tr>
-                    <td>${item.rule_template}</td>
-                    <td>${item.rule_id}</td>
-                    <td>${item.rule_name}</td>
-                </tr>
-            `;
-        });
-    }
-    whiteListBody.innerHTML = tableRows;
-    updatePageInfo();
-}
+// 点击刷新按钮时自动请求列表
+document.getElementById('refreshButton').addEventListener('click', function () {
+    fetchWhiteList();
+});
 
-// 更新分页信息
-function updatePageInfo() {
-    const pageInfo = document.getElementById('pageInfo');
-    const totalPages = Math.ceil(allWhiteListData.length / pageSize);
-    pageInfo.textContent = `第 ${currentPage} 页，共 ${totalPages} 页`;
-    const prevButton = document.querySelector('[onclick="prevPage()"]');
-    const nextButton = document.querySelector('[onclick="nextPage()"]');
-    prevButton.disabled = currentPage === 1;
-    nextButton.disabled = currentPage === Math.ceil(allWhiteListData.length / pageSize);
-}
+// 切换每页显示条数时更新数据
+document.getElementById('pageSizeSelector').addEventListener('change', function (event) {
+    pageSize = parseInt(event.target.value, 10);
+    currentPage = 1; // 重置为第一页
+    fetchWhiteList();
+});
 
-// 上一页
+// 上一页按钮事件
 function prevPage() {
     if (currentPage > 1) {
         currentPage--;
-        renderWhiteList(allWhiteListData);
+        fetchWhiteList();
     }
 }
 
-// 下一页
+// 下一页按钮事件
 function nextPage() {
-    const totalPages = Math.ceil(allWhiteListData.length / pageSize);
-    if (currentPage < totalPages) {
-        currentPage++;
-        renderWhiteList(allWhiteListData);
-    }
+    currentPage++;
+    fetchWhiteList();
 }
 
-// 改变每页显示数量
-function changePageSize(size) {
-    pageSize = parseInt(size);
-    currentPage = 1;
-    renderWhiteList(allWhiteListData);
-}
-
-// 刷新列表
-function refreshList() {
-    currentPage = 1;
-    loadWhiteList();
-}
-
-// 页面加载完成后执行的操作
-window.addEventListener('load', () => {
-    loadWhiteList();
-
-    // 监听分页选择器变化
-    const pageSizeSelector = document.getElementById('pageSizeSelector');
-    pageSizeSelector.addEventListener('change', function () {
-        changePageSize(this.value);
-    });
-
-    // 监听上一页按钮点击事件
-    const prevButton = document.querySelector('[onclick="prevPage()"]');
-    prevButton.addEventListener('click', prevPage);
-
-    // 监听下一页按钮点击事件
-    const nextButton = document.querySelector('[onclick="nextPage()"]');
-    nextButton.addEventListener('click', nextPage);
-
-    // 监听刷新列表按钮点击事件
-    const refreshButton = document.querySelector('[onclick="refreshList()"]');
-    refreshButton.addEventListener('click', refreshList);
-});
-
-// 导出加载白名单列表的函数，供其他文件调用
-export { loadWhiteList };
-    
+// 初次加载时自动请求一次列表
+window.onload = function() {
+    fetchWhiteList();
+};

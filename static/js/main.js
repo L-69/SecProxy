@@ -41,8 +41,11 @@ function loadContent(menuItem) {
             loadingOverlay.style.display = 'none';
             // 清空当前内容
             mainContent.innerHTML = '';
-            // 显示获取到的内容
+            // 插入新内容
             mainContent.innerHTML = data;
+
+            // 动态加载外部JS文件
+            loadExternalScripts(mainContent);
         })
       .catch(error => {
             // 隐藏加载动画
@@ -54,4 +57,17 @@ function loadContent(menuItem) {
             // 重置加载状态
             isLoading = false;
         });
+}
+
+// 动态加载外部JS文件
+function loadExternalScripts(container) {
+    const script = document.createElement('script');
+    script.src = '/static/js/whitelist.js'; // 确保路径正确
+    script.onload = function () {
+        console.log('JS文件加载成功');
+    };
+    script.onerror = function () {
+        console.log('JS文件加载失败');
+    };
+    document.body.appendChild(script);
 }
