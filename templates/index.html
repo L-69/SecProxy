@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="stylesheet" href="/static/css/main.css">
-
 </head>
 <body>
     <header class="header">
@@ -19,91 +18,74 @@
     <main class="main-container">
         <nav class="menu-panel">
             <!-- 首页菜单项 -->
-            <button class="menu-item active" data-route="/first"" onclick="loadContent(this)" style="color: #000000; font-weight: bold; font-size: 1.2rem;">
-                <i class="fas fa-home me-2"></i>
-                首页
+            <button class="menu-item active" data-route="/first" style="color: #000000; font-weight: bold; font-size: 1.2rem;">
+                <i class="fas fa-home me-2"></i> 首页
             </button>
-
             <!-- 阿里WAF 分组 -->
             <div class="menu-group">
                 <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#wafMenu" aria-expanded="false" aria-controls="wafMenu" style="color: #000000; font-weight: bold; font-size: 1.2rem;">
                     <i class="fas fa-shield-alt me-2"></i> 阿里WAF
                 </button>
                 <div class="collapse" id="wafMenu">
-                    <button class="menu-item" data-route="/waf_listwhite" onclick="loadContent(this)">
-                        <i class="fas fa-list-ul me-2"></i>
-                        白名单列表
+                    <button class="menu-item" data-route="/waf_listwhite">
+                        <i class="fas fa-list-ul me-2"></i> 白名单列表
                     </button>
-                    <button class="menu-item" data-route="/waf_addwhite" onclick="loadContent(this)">
-                        <i class="fas fa-plus-circle me-2"></i>
-                        添加白名单
+                    <button class="menu-item" data-route="/waf_addwhite">
+                        <i class="fas fa-plus-circle me-2"></i> 添加白名单
                     </button>
-                    <button class="menu-item" data-route="/waf_deletewhite" onclick="loadContent(this)">
-                        <i class="fas fa-trash-alt me-2"></i>
-                        删除白名单
+                    <button class="menu-item" data-route="/waf_deletewhite">
+                        <i class="fas fa-trash-alt me-2"></i> 删除白名单
                     </button>
-                    <button class="menu-item" data-route="/waf_attackreport" onclick="loadContent(this)">
-                        <i class="fas fa-chart-bar me-2"></i>
-                        攻击汇总分析
+                    <button class="menu-item" data-route="/waf_attackreport">
+                        <i class="fas fa-chart-bar me-2"></i> 攻击汇总分析
                     </button>
-                    <button class="menu-item" data-route="/waf_descblackrule" onclick="loadContent(this)">
-                        <i class="fas fa-shield-alt me-2"></i>
-                        黑名单规则查看
+                    <button class="menu-item" data-route="/waf_descblackrule">
+                        <i class="fas fa-shield-alt me-2"></i> 黑名单规则查看
                     </button>
-                    <button class="menu-item" data-route="/waf_modifyblackrule" onclick="loadContent(this)">
-                        <i class="fas fa-shield-alt me-2"></i>
-                        黑名单规则修改
+                    <button class="menu-item" data-route="/waf_modifyblackrule">
+                        <i class="fas fa-shield-alt me-2"></i> 黑名单规则修改
                     </button>
-                    <button class="menu-item" data-route="/waf_dd_alert" onclick="loadContent(this)">
-                        <i class="fab fa-dingtalk me-2"></i>
-                        钉钉告警设置
+                    <button class="menu-item" data-route="/waf_dd_alert">
+                        <i class="fab fa-dingtalk me-2"></i> 钉钉告警设置
                     </button>
                 </div>
             </div>
-
             <!-- 脚本管理 分组 -->
             <div class="menu-group">
                 <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#scriptMenu" aria-expanded="false" aria-controls="scriptMenu" style="color: #000000; font-weight: bold; font-size: 1.2rem;">
                     <i class="fas fa-code me-2"></i> 脚本管理
                 </button>
                 <div class="collapse" id="scriptMenu">
-                    <button class="menu-item" data-route="/xx" onclick="loadContent(this)">
-                        <i class="fas fa-shield-alt me-2"></i>
-                        脚本1
+                    <button class="menu-item" data-route="/xx">
+                        <i class="fas fa-shield-alt me-2"></i> 脚本1
                     </button>
-                    <button class="menu-item" data-route="/xxx" onclick="loadContent(this)">
-                        <i class="fas fa-shield-alt me-2"></i>
-                        脚本2
+                    <button class="menu-item" data-route="/xxx">
+                        <i class="fas fa-shield-alt me-2"></i> 脚本2
                     </button>
                 </div>
             </div>
-
             <!-- 资料获取 分组 -->
             <div class="menu-group">
                 <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#dataMenu" aria-expanded="false" aria-controls="dataMenu" style="color: #000000; font-weight: bold; font-size: 1.2rem;">
                     <i class="fas fa-book me-2"></i> 资料获取
                 </button>
                 <div class="collapse" id="dataMenu">
-                    <button class="menu-item" data-route="/x" onclick="loadContent(this)">
-                        <i class="fab fa-dingtalk me-2"></i>
-                        资料查看
+                    <button class="menu-item" data-route="/x">
+                        <i class="fab fa-dingtalk me-2"></i> 资料查看
                     </button>
-                    <button class="menu-item" data-route="/xxxxx" onclick="loadContent(this)">
-                        <i class="fas fa-upload me-2"></i>
-                        资料上传
+                    <button class="menu-item" data-route="/xxxxx">
+                        <i class="fas fa-upload me-2"></i> 资料上传
                     </button>
                 </div>
             </div>
-
             <!-- 系统配置 分组 -->
             <div class="menu-group">
                 <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#configMenu" aria-expanded="false" aria-controls="configMenu" style="color: #000000; font-weight: bold; font-size: 1.2rem;">
                     <i class="fas fa-cogs me-2"></i> 系统配置
                 </button>
                 <div class="collapse" id="configMenu">
-                    <button class="menu-item" data-route="/config" onclick="loadContent(this)">
-                        <i class="fas fa-cogs me-2"></i>
-                        系统配置
+                    <button class="menu-item" data-route="/config">
+                        <i class="fas fa-cogs me-2"></i> 系统配置
                     </button>
                 </div>
             </div>

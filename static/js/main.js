@@ -15,7 +15,12 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+let isLoading = false;
+
 function loadContent(menuItem) {
+    if (isLoading) return;  // 防止重复请求
+    isLoading = true;
+
     const route = menuItem.dataset.route;
     const mainContent = document.getElementById('mainContent');
     const loadingOverlay = document.getElementById('loadingOverlay');
@@ -44,5 +49,9 @@ function loadContent(menuItem) {
             loadingOverlay.style.display = 'none';
             // 显示错误信息
             mainContent.innerHTML = `<h3>加载内容出错</h3><p>错误信息: ${error.message}</p>`;
+        })
+      .finally(() => {
+            // 重置加载状态
+            isLoading = false;
         });
-}    
+}
