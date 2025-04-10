@@ -36,13 +36,33 @@ def desc_rule():
             
             if rule_obj is None:
                 return jsonify({'status': 'error', 'message': 'No rule object found in the response body.'}), 500
-            
-            # 检查是否具有 to_map 方法
-            if hasattr(rule_obj, 'to_map'):
-                rule_dict = rule_obj.to_map()
-                return jsonify({'status': 'success', 'message': rule_dict}), 200
-            else:
+
+            if not hasattr(rule_obj, 'to_map'):
                 return jsonify({'status': 'error', 'message': 'Rule object does not have to_map() method.'}), 500
+
+            rule_dict = rule_obj.to_map()
+
+            # 解析 Config 字段中的 IP 列表
+            config_str = rule_dict.get('Config')
+            if not config_str:
+                return jsonify({'status': 'error', 'message': 'No Config field found.'}), 500
+
+            import json
+            try:
+                config_data = json.loads(config_str)
+                ip_list = config_data.get('remoteAddr', [])
+            except json.JSONDecodeError:
+                return jsonify({'status': 'error', 'message': 'Failed to parse Config JSON.'}), 500
+
+            # 构造规则信息
+            result = [{
+                "template_id": rule_dict.get('TemplateId'),
+                "rule_id": rule_dict.get('RuleId'),
+                "rule_name": rule_dict.get('RuleName'),
+                "ip_list": ip_list
+            }]
+
+            return jsonify({'status': 'success', 'message': result}), 200
 
         except Exception as error:
             print("Error:", error)

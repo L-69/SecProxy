@@ -9,6 +9,10 @@ index = Blueprint('index', __name__)
 def hello_world():
     return render_template('index.html')
 
+@index.route('/first', methods=['GET'])
+def first():
+    return render_template('first.html')
+
 @index.route('/waf_addwhite', methods=['GET'])
 def waf_addwhite():
     return render_template('waf_addwhite.html')

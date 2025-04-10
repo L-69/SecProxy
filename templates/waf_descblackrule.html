@@ -1,58 +1,53 @@
 <div class="config-card">
-    <h4 class="mb-4"><i class="fas fa-book me-2"></i>规则描述管理</h4>
-    
-    <div class="row g-4">
-        <!-- 规则分类导航 -->
-        <div class="col-lg-3">
-            <div class="nav flex-column nav-pills">
-                <button class="nav-link active" data-bs-toggle="pill" 
-                        data-target="#ipRules">IP规则</button>
-                <button class="nav-link" data-bs-toggle="pill" 
-                        data-target="#sqlRules">SQL注入规则</button>
-                <button class="nav-link" data-bs-toggle="pill"
-                        data-target="#xssRules">XSS防护规则</button>
-            </div>
-        </div>
-
-        <!-- 规则内容区域 -->
-        <div class="col-lg-9">
-            <div class="tab-content">
-                <!-- IP规则 -->
-                <div class="tab-pane fade show active" id="ipRules">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5><i class="fas fa-network-wired me-2"></i>IP封禁规则</h5>
-                            <pre class="bg-light p-3 rounded"># 格式：IP地址/掩码 封禁时间(秒) 原因
-192.168.1.0/24 3600 可疑扫描行为
-10.0.0.5/32 permanent 已知攻击源</pre>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- SQL注入规则 -->
-                <div class="tab-pane fade" id="sqlRules">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5><i class="fas fa-database me-2"></i>SQL注入防护规则</h5>
-                            <pre class="bg-light p-3 rounded"># 匹配模式：正则表达式
-\b(union|select|insert|delete|update|drop|alter)\b</pre>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- XSS规则 -->
-                <div class="tab-pane fade" id="xssRules">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5><i class="fas fa-code me-2"></i>XSS攻击防护规则</h5>
-                            <pre class="bg-light p-3 rounded"># 匹配特征：
-<script>.*?</script>
-javascript:
-<iframe></pre>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <h4 class="mb-4"><i class="fas fa-ban me-2"></i>黑名单列表</h4>
+  
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>模版ID</th>
+            <th>规则ID</th>
+            <th>规则名称</th>
+            <th>IP地址列表</th>
+          </tr>
+        </thead>
+        <tbody id="blackListBody">
+          <!-- 数据将动态加载到这里 -->
+          <tr>
+            <td colspan="4" class="text-center text-muted py-4">
+              <div class="spinner-border spinner-border-sm" role="status">
+                <span class="visually-hidden">加载中...</span>
+              </div>
+              正在加载黑名单数据
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-</div>
+  
+    <!-- 分页控制 -->
+    <div class="d-flex justify-content-between align-items-center mt-3">
+      <div>
+        每页显示：
+        <select id="pageSizeSelector" onchange="changePageSize(this.value)">
+          <option value="5">5 条</option>
+          <option value="10" selected>10 条</option>
+          <option value="20">20 条</option>
+        </select>
+      </div>
+      <div>
+        <button class="btn btn-sm btn-outline-secondary me-2" onclick="prevPage()">上一页</button>
+        <span id="pageInfo">第 1 页</span>
+        <button class="btn btn-sm btn-outline-secondary ms-2" onclick="nextPage()">下一页</button>
+      </div>
+    </div>
+  
+    <div class="d-flex justify-content-end mt-3">
+      <button class="btn btn-outline-primary" onclick="refreshList()">
+        <i class="fas fa-sync-alt me-2"></i>刷新列表
+      </button>
+    </div>
+  </div>
+  <script src="../static/js/main.js"></script>
+  <script src="../static/js/descblackrule.js"></script>
+  
