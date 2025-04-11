@@ -24,10 +24,18 @@ export default {
 
 <style scoped>
 .footer {
-  background-color: #343a40;
+  background-color: #0a0a1a;
   color: white;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
+  padding: 1rem 0;
+}
+
+.social-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+.text-muted {
+  color: #6c757d !important;
 }
 </style>

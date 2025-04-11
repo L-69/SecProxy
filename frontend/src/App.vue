@@ -1,4 +1,4 @@
-<template>
+`<template>
   <div class="app-container">
     <Header />
     <main class="main-container">
@@ -26,4 +26,16 @@ export default {
 
 <style>
 /* 全局样式 */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-container {
+  display: flex;
+  flex: 1;
+}
+
+/* 其他全局样式 */
 </style>
