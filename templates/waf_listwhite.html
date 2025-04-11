@@ -1,50 +1,60 @@
-<div class="config-card">
-    <h4 class="mb-4"><i class="fas fa-list-ul me-2"></i>白名单列表</h4>
-    
-    <div class="table-responsive">
-        <table class="table table-hover align-middle">
-            <thead class="table-light">
-                <tr>
-                    <th>模版ID</th>
-                    <th>规则ID</th>
-                    <th>规则名字</th>
-                </tr>
-            </thead>
-            <tbody id="whiteListBody">
-                <!-- 数据将动态加载到这里 -->
-                <tr>
-                    <td colspan="5" class="text-center text-muted py-4">
-                        <div class="spinner-border spinner-border-sm" role="status">
-                            <span class="visually-hidden">加载中...</span>
-                        </div>
-                        正在加载白名单数据
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <!-- 分页控制 -->
-    <div class="d-flex justify-content-between align-items-center mt-3">
-        <div>
-            每页显示：
-            <select id="pageSizeSelector" onchange="changePageSize(this.value)">
-                <option value="5">5 条</option>
-                <option value="10" selected>10 条</option>
-                <option value="20">20 条</option>
-            </select>
-        </div>
-        <div>
-            <button class="btn btn-sm btn-outline-secondary me-2" onclick="prevPage()">上一页</button>
-            <span id="pageInfo">第 1 页</span>
-            <button class="btn btn-sm btn-outline-secondary ms-2" onclick="nextPage()">下一页</button>
-        </div>
-    </div>
-    <div class="d-flex justify-content-end mt-3">
-        <button class="btn btn-outline-primary" onclick="refreshList()">
-            <i class="fas fa-sync-alt me-2"></i>刷新列表
-        </button>
-    </div>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>白名单列表</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</head>
+<body>
+    <!-- 这是 mainContent 内容区域 -->
+    <div id="mainContent">
+        <div class="config-card p-4 rounded-3 shadow-sm bg-white">
+            <h4 class="mb-4"><i class="fas fa-list-ul me-2"></i>白名单列表</h4>
 
-<script src="{{ url_for('static', filename='js/whitelist.js') }}"></script>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>模版ID</th>
+                            <th>规则ID</th>
+                            <th>规则名字</th>
+                        </tr>
+                    </thead>
+                    <tbody id="whiteListBody">
+                        <!-- JS 动态插入 -->
+                    </tbody>
+                </table>
+            </div>
 
+            <!-- 分页控制 -->
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <div>
+                    每页显示：
+                    <select id="pageSizeSelector">
+                        <option value="5">5 条</option>
+                        <option value="10" selected>10 条</option>
+                        <option value="20">20 条</option>
+                    </select>
+                </div>
+                <div>
+                    <button id="prevButton" class="btn btn-sm btn-outline-secondary me-2">上一页</button>
+                    <span id="pageInfo">第 1 页</span>
+                    <button id="nextButton" class="btn btn-sm btn-outline-secondary ms-2">下一页</button>
+                </div>
+            </div>
+
+            <!-- 刷新按钮 -->
+            <div class="d-flex justify-content-end mt-3">
+                <button id="refreshButton" class="btn btn-outline-primary">
+                    <i class="fas fa-sync-alt me-2"></i>刷新列表
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 加载外部 JavaScript 文件 -->
+    <script src="/static/js/whitelist.js" ></script>
+</body>
+</html>

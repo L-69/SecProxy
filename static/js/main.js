@@ -63,11 +63,11 @@ function loadContent(menuItem) {
 function loadExternalScripts(container) {
     const script = document.createElement('script');
     script.src = '/static/js/whitelist.js'; // 确保路径正确
-    script.onload = function () {
-        console.log('JS文件加载成功');
-    };
-    script.onerror = function () {
-        console.log('JS文件加载失败');
-    };
+    // script.onload = function () {
+    //     console.log('JS文件加载成功');
+    // };
+    // script.onerror = function () {
+    //     console.log('JS文件加载失败');
+    // };
     document.body.appendChild(script);
 }
